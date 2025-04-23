@@ -17,21 +17,6 @@ Variant Calling per sample using GATK HaplotypeCaller
 
 Joint Genotyping preparation using GATK GenomicsDBImport
 
-📁 Repository Structure
-
-├── scripts/                  # All analysis scripts
-│   ├── 01_fastp_all.sh
-│   ├── 02_bwa_align_all.sh
-│   ├── 03_sort_index_all.sh
-│   ├── 04_mark_duplicates_all.sh
-│   ├── 05_haplotypecaller_all.sh
-│   ├── 06_genomicsdbimport.sh
-│   └── generate_exome_bed.sh
-├── samples.txt              # List of sample IDs
-├── grch38_exons_merged.bed # BED file of exonic regions (from GTF)
-├── README.md
-├── .gitignore               # To exclude logs, results, and heavy files
-
 🛠️ Tools and Environment
 
 This pipeline was run on a Linux server with Conda. Tools used:
