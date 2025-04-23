@@ -22,12 +22,16 @@ done < $SAMPLE_LIST
 # === Run GenomicsDBImport ===
 echo "[06 - GenomicsDBImport] Started at $(date)" | tee $LOGDIR/genomicsdbimport.log
 
-gatk GenomicsDBImport \
-  --genomicsdb-workspace-path $WORKSPACE \
-  --intervals $BED \
-  $INPUTS \
+gatk --java-options "-Xmx4g" GenomicsDBImport \
+  --genomicsdb-workspace-path genomicsdb_fixed \
+  --intervals grch38_clean3.bed \
+  -V results_dna/Sample1/Sample1.g.vcf.gz \
+  -V results_dna/Sample2/Sample2.g.vcf.gz \
+  -V results_dna/Sample3/Sample3.g.vcf.gz \
+  -V results_dna/Sample4/Sample4.g.vcf.gz \
   --batch-size 50 \
-  --reader-threads $THREADS \
-  2>> $LOGDIR/genomicsdbimport.log
+  --reader-threads 4 \
+  --merge-input-intervals \
+  --disable-sequence-dictionary-validation
 
 echo "[06 - GenomicsDBImport] Done at $(date)" | tee -a $LOGDIR/genomicsdbimport.log
