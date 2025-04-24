@@ -1,23 +1,23 @@
 #!/bin/bash
-set -e
+set -euo pipefail
 
 # === Config ===
-DB_WORKSPACE="genomicsdb"
-REF="../hg38_index/Homo_sapiens.GRCh38.dna.primary_assembly.fa"
-OUTPUT_VCF="joint_genotyped.vcf.gz"
-LOGDIR="logs"
-THREADS=4
+REFERENCE="/home/bastoni/hg38_index/Homo_sapiens.GRCh38.dna.primary_assembly.fa"
+GENOMICSDB="genomicsdb_fixed"
+OUTPUT_VCF="results_dna/genotyped.vcf.gz"
+LOGFILE="logs/genotypegvcfs.log"
 
-mkdir -p $LOGDIR
+mkdir -p results_dna logs
 
-echo "[07 - GenotypeGVCFs] Started at $(date)" | tee $LOGDIR/genotypegvcfs.log
+# === Run GenotypeGVCFs ===
+echo "[07 - GenotypeGVCFs] Started at $(date)" | tee $LOGFILE
 
-gatk GenotypeGVCFs \
-  -R $REF \
-  -V gendb://$DB_WORKSPACE \
-  -O $OUTPUT_VCF \
-  --tmp-dir ./tmp \
-  --native-pair-hmm-threads $THREADS \
-  2>> $LOGDIR/genotypegvcfs.log
+gatk --java-options "-Xmx4g" GenotypeGVCFs \
+  -R "$REFERENCE" \
+  -V "gendb://$GENOMICSDB" \
+  -O "$OUTPUT_VCF" \
+  --disable-sequence-dictionary-validation \
+  2>> $LOGFILE
 
-echo "[07 - GenotypeGVCFs] Done at $(date)" | tee -a $LOGDIR/genotypegvcfs.log
+echo "[07 - GenotypeGVCFs] Done at $(date)" | tee -a $LOGFILE
+
